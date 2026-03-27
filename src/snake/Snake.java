@@ -4,6 +4,7 @@
  */
 package snake;
 
+import snake.interfaces.DrawSquareInterface;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import javax.xml.xpath.XPathConstants;
@@ -19,7 +20,6 @@ public class Snake {
     private ArrayList<Node> nodes = new ArrayList<>();
     private Direction direction = Direction.RIGHT;
 
-    
     private DrawSquareInterface drawSquareInterface;
     private int nodesToGrow;
 
@@ -51,6 +51,7 @@ public class Snake {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+
     public Direction getDirection() {
         return direction;
     }
@@ -60,25 +61,31 @@ public class Snake {
         switch (direction) {
             case UP:
                 node = new Node(this.getFirst().getRow() - 1, this.getFirst().getCol());
-                nodes.add(0, node);
-                nodes.remove(nodes.size() - 1);
                 break;
             case DOWN:
                 node = new Node(this.getFirst().getRow() + 1, this.getFirst().getCol());
-                nodes.add(0, node);
-                nodes.remove(nodes.size() - 1);
                 break;
             case RIGHT:
                 node = new Node(this.getFirst().getRow(), this.getFirst().getCol() + 1);
-                nodes.add(0, node);
-                nodes.remove(nodes.size() - 1);
                 break;
             case LEFT:
                 node = new Node(this.getFirst().getRow(), this.getFirst().getCol() - 1);
-                nodes.add(0, node);
-                nodes.remove(nodes.size() - 1);
                 break;
+            default:
+                return;
         }
+
+        nodes.add(0, node);
+
+        if (nodesToGrow > 0) {
+            nodesToGrow--;
+        } else {
+            nodes.remove(nodes.size() - 1);
+        }
+    }
+
+    public void grow() {
+        nodesToGrow++;
     }
 
     public boolean hitsSelf(int row, int col) {
@@ -90,5 +97,4 @@ public class Snake {
         return false;
     }
 
-    
 }
