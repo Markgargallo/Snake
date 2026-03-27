@@ -17,72 +17,110 @@ import javax.swing.Timer;
  *
  * @author margargar96
  */
-public class Board extends javax.swing.JPanel implements DrawSquareInterface{
+  
 
-    
-    public static final int NUM_ROWS = 20;
-    public static final int NUM_COLS = 40;
-    private static final int DELTA_TIME = 200;
+    public class Board extends javax.swing.JPanel implements DrawSquareInterface {
 
-    private Snake snake;
-    private Timer timer;
-    private MyKeyAdapter keyAdapter;
+        public static final int NUM_ROWS = 20;
+        public static final int NUM_COLS = 40;
+        private static final int DELTA_TIME = 100;
+        private Food food;
+        private SpecialFood specialFood;
+        private int specialFoodCounter = 0;
 
-    public Board() {
-        initComponents();
-        snake = new Snake(this);
-        initBoard();
-        
-    }
-    
-    class MyKeyAdapter extends KeyAdapter {
+        private Snake snake;
+        private Timer timer;
+        private MyKeyAdapter keyAdapter;
 
-        @Override
-        public void keyPressed(KeyEvent e) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_LEFT:
-                    snake.setDirection(Direction.LEFT);
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    snake.setDirection(Direction.RIGHT);
-                    break;
-                case KeyEvent.VK_UP:
-                    snake.setDirection(Direction.UP);
-                    break;
-                case KeyEvent.VK_DOWN:
-                    snake.setDirection(Direction.DOWN);
-                    break;
-                default:
-                    break;
-            }
-            repaint();
+        public Board() {
+            initComponents();
+            snake = new Snake(this);
+            initBoard();
+
         }
-    }
-    
-    
-    /**
-     * Creates new form Board
-     */
-   
-    private void initBoard() {
-        
-        keyAdapter = new MyKeyAdapter();
-        addKeyListener(keyAdapter);
-        setFocusable(true);
 
-        timer = new Timer(DELTA_TIME, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                doGameLoop();
+        class MyKeyAdapter extends KeyAdapter {
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        Direction currentDir = snake.getDirection();
+
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                if (currentDir != Direction.RIGHT) {
+                    snake.setDirection(Direction.LEFT);
+                }
+                break;
+            case KeyEvent.VK_RIGHT:
+                if (currentDir != Direction.LEFT) {
+                    snake.setDirection(Direction.RIGHT);
+                }
+                break;
+            case KeyEvent.VK_UP:
+                if (currentDir != Direction.DOWN) {
+                    snake.setDirection(Direction.UP);
+                }
+                break;
+            case KeyEvent.VK_DOWN:
+                if (currentDir != Direction.UP) {
+                    snake.setDirection(Direction.DOWN);
+                }
+                break;
+        }
+        repaint();
+    }
+}
+
+        /**
+         * Creates new form Board
+         */
+        private void initBoard() {
+
+            keyAdapter = new MyKeyAdapter();
+            addKeyListener(keyAdapter);
+            setFocusable(true);
+
+            timer = new Timer(DELTA_TIME, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    doGameLoop();
+                }
+            });
+            initGame();
+        }
+
+        private void initGame() {
+            timer.start();
+            generateFood();
+            specialFood = null;
+            specialFoodCounter = 0;
+        }
+
+        private void generateFood() {
+            int row = (int) (Math.random() * NUM_ROWS);
+            int col = (int) (Math.random() * NUM_COLS);
+
+            while (snake.hitsSelf(row, col)) {
+                row = (int) (Math.random() * NUM_ROWS);
+                col = (int) (Math.random() * NUM_COLS);
             }
-        });
-        initGame();
-    }
-    
-    private void initGame(){
-        timer.start();
-    }
-    private void doGameLoop() { 
+
+            food = new Food(row, col);
+
+        }
+
+        private void generateSpecialFood() {
+            int row2 = (int) (Math.random() * NUM_ROWS);
+            int col2 = (int) (Math.random() * NUM_COLS);
+            while (snake.hitsSelf(row2, col2) || (row2 == food.getRow() && col2 == food.getCol())) {
+                row2 = (int) (Math.random() * NUM_ROWS);
+                col2 = (int) (Math.random() * NUM_COLS);
+            }
+            specialFood = new SpecialFood(row2, col2);
+            specialFoodCounter = 0;
+        }
+
+        private void doGameLoop() {
     int nextRow = snake.getFirst().getRow();
     int nextCol = snake.getFirst().getCol();
 
@@ -94,24 +132,54 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface{
     }
 
     if (canMove(nextRow, nextCol)) {
+
+        if (food != null && nextRow == food.getRow() && nextCol == food.getCol()) {
+            snake.grow();
+            generateFood();
+        }
+
+        if (specialFood != null) {
+            if (nextRow == specialFood.getRow() && nextCol == specialFood.getCol()) {
+                snake.grow();
+                snake.grow();
+                snake.grow();
+                specialFood = null;
+                specialFoodCounter = 0;
+            } else {
+                specialFoodCounter++;
+                if (specialFoodCounter >= 35) { 
+                    specialFood = null;
+                    specialFoodCounter = 0;
+                }
+            }
+        } else {
+            specialFoodCounter++;
+            if (specialFoodCounter >= 50) { 
+                generateSpecialFood();
+            }
+        }
+
         snake.move();
+
     } else {
-        timer.stop(); // Game Over
+        timer.stop();
     }
 
     repaint();
 }
-    private boolean canMove(int row, int col) {
-    if (row < 0 || row >= NUM_ROWS || col < 0 || col >= NUM_COLS) {
-        return false;
-    }
     
-    if (snake.hitsSelf(row, col)) {
-        return false;
-    }
 
-    return true;
-}
+    private boolean canMove(int row, int col) {
+        if (row < 0 || row >= NUM_ROWS || col < 0 || col >= NUM_COLS) {
+            return false;
+        }
+
+        if (snake.hitsSelf(row, col)) {
+            return false;
+        }
+
+        return true;
+    }
 
     private int squareWidth() {
         return getWidth() / NUM_COLS;
@@ -120,11 +188,18 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface{
     private int squareHeight() {
         return getHeight() / NUM_ROWS;
     }
-    
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         snake.paint(g);
+        if (food != null) {
+            drawSquare(g, food.getRow(), food.getCol(), false);
+        }
+
+        if (specialFood != null) {
+            drawSquare(g, specialFood.getRow(), specialFood.getCol(), true);
+        }
         Toolkit.getDefaultToolkit().sync();
     }
 
@@ -152,12 +227,6 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface{
                 y + squareHeight() - 1,
                 x + squareWidth() - 1, y + 1);
     }
-    
-    
-    
-   
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
