@@ -9,7 +9,7 @@ package snake;
  * @author margargar96
  */
 public class Game extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Game.class.getName());
 
     /**
@@ -17,8 +17,24 @@ public class Game extends javax.swing.JFrame {
      */
     public Game() {
         initComponents();
-        board2.setIncrementer(scoreboard1);   
-        
+        board1.setIncrementer(scoreboard2);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ConfigDialog dialog = new ConfigDialog(Game.this, true);
+                dialog.setLocationRelativeTo(Game.this);
+                dialog.setVisible(true);
+
+                if (dialog.isConfirmed()) {
+                    scoreboard2.setPlayerName(dialog.getPlayerName());
+
+                    board1.startGame(dialog.getDeltaTime());
+                } else {
+                    System.exit(0);
+                }
+            }
+        });
+
     }
 
     /**
@@ -30,30 +46,30 @@ public class Game extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        scoreboard1 = new snake.Scoreboard();
-        board2 = new snake.Board();
+        scoreboard2 = new snake.Scoreboard();
+        board1 = new snake.Board();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().add(scoreboard2, java.awt.BorderLayout.PAGE_END);
 
-        scoreboard1.setBackground(new java.awt.Color(0, 255, 255));
-        getContentPane().add(scoreboard1, java.awt.BorderLayout.PAGE_END);
-
-        javax.swing.GroupLayout board2Layout = new javax.swing.GroupLayout(board2);
-        board2.setLayout(board2Layout);
-        board2Layout.setHorizontalGroup(
-            board2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 407, Short.MAX_VALUE)
+        javax.swing.GroupLayout board1Layout = new javax.swing.GroupLayout(board1);
+        board1.setLayout(board1Layout);
+        board1Layout.setHorizontalGroup(
+            board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 522, Short.MAX_VALUE)
         );
-        board2Layout.setVerticalGroup(
-            board2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 383, Short.MAX_VALUE)
+        board1Layout.setVerticalGroup(
+            board1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 381, Short.MAX_VALUE)
         );
 
-        getContentPane().add(board2, java.awt.BorderLayout.CENTER);
+        getContentPane().add(board1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -80,7 +96,7 @@ public class Game extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private snake.Board board2;
-    private snake.Scoreboard scoreboard1;
+    private snake.Board board1;
+    private snake.Scoreboard scoreboard2;
     // End of variables declaration//GEN-END:variables
 }

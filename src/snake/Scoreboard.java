@@ -10,19 +10,30 @@ import snake.interfaces.Incrementer1;
  *
  * @author margargar96
  */
-public class Scoreboard extends javax.swing.JPanel implements Incrementer1{
+public class Scoreboard extends javax.swing.JPanel implements Incrementer1 {
 
-    private int score;
+    private int score = 0;
+    private String playerName = "PLAYER";
 
     public Scoreboard() {
         initComponents();
-        score = 0;
-        incrementScore(0);
     }
 
+    public void setPlayerName(String name) {
+        this.playerName = name.toUpperCase();
+        jLabel1.setText("SCORE FOR " + playerName + ": " + score);
+    }
+
+    @Override
     public void incrementScore(int increment) {
         score += increment;
-        jLabel1.setText("Score: " + score);
+        jLabel1.setText("SCORE FOR " + playerName + ": " + score);
+    }
+
+    @Override
+    public void reset() {
+        score = 0;
+        jLabel1.setText("SCORE FOR " + playerName + ": " + score);
     }
 
     /**
@@ -39,22 +50,24 @@ public class Scoreboard extends javax.swing.JPanel implements Incrementer1{
 
         jLabel1 = new javax.swing.JLabel();
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setFont(new java.awt.Font("Gayathri", 0, 18)); // NOI18N
+        jLabel1.setText("               jLabel1");
+        jLabel1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(174, 174, 174)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(167, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(76, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -63,8 +76,5 @@ public class Scoreboard extends javax.swing.JPanel implements Incrementer1{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
-    public void reset() {
-        score = 0;
-        incrementScore(0);
-    }
+
 }

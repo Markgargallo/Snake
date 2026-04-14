@@ -23,7 +23,7 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
 
     public static final int NUM_ROWS = 20;
     public static final int NUM_COLS = 40;
-    private static final int DELTA_TIME = 150;
+    private int DELTA_TIME = 150;
     private boolean canChangeDirection = true;
     private Food food;
     private SpecialFood specialFood;
@@ -45,8 +45,10 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            
-            if (!canChangeDirection) return;
+
+            if (!canChangeDirection) {
+                return;
+            }
             Direction currentDir = snake.getDirection();
 
             switch (e.getKeyCode()) {
@@ -94,7 +96,6 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
                 doGameLoop();
             }
         });
-        initGame();
     }
 
     public void setIncrementer(Incrementer1 incrementer) {
@@ -107,6 +108,21 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
         specialFood = null;
         specialFoodCounter = 0;
     }
+
+    public void startGame(int speed) {
+    this.DELTA_TIME = speed;
+    
+    snake = new Snake(this); 
+    
+    if (incrementer != null) {
+        incrementer.reset();
+    }
+    
+    timer.setDelay(DELTA_TIME);         
+    timer.setInitialDelay(DELTA_TIME);  
+    initGame();                        
+    this.requestFocusInWindow();      
+}
 
     private void generateFood() {
         int row = (int) (Math.random() * NUM_ROWS);
@@ -191,10 +207,30 @@ public class Board extends javax.swing.JPanel implements DrawSquareInterface {
 
         } else {
             timer.stop();
+            gameOver();
         }
 
         repaint();
     }
+    
+    private void gameOver() {
+    timer.stop(); 
+    
+    java.awt.Window parentWindow = javax.swing.SwingUtilities.getWindowAncestor(this);
+    DeadDialog dialog = new DeadDialog((java.awt.Frame) parentWindow, true);
+    
+    dialog.setLocationRelativeTo(this);
+    dialog.setVisible(true);
+
+    if (dialog.getUserSelection() == DeadDialog.RESTART_SAME) {
+        startGame(this.DELTA_TIME); 
+    } else if (dialog.getUserSelection() == DeadDialog.RESTART_NEW) {
+        if (parentWindow != null) {
+            parentWindow.dispose();
+        }
+        new Game().setVisible(true);
+    }
+}
 
     private boolean canMove(int row, int col) {
         if (row < 0 || row >= NUM_ROWS || col < 0 || col >= NUM_COLS) {
