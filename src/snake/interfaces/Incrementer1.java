@@ -10,7 +10,9 @@ package snake.interfaces;
  */
 public interface Incrementer1 {
 
-    public void incrementScore(int increment);
+    void incrementScore(int snakeNumber,int points);
 
-    public void reset();
+    void reset(); 
+
+    
 }

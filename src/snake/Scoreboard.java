@@ -12,28 +12,62 @@ import snake.interfaces.Incrementer1;
  */
 public class Scoreboard extends javax.swing.JPanel implements Incrementer1 {
 
-    private int score = 0;
-    private String playerName = "PLAYER";
+    private String name1 = "Player 1";
+    private String name2 = "Player 2";
+    private int score1 = 0;
+    private int score2 = 0;
+    private boolean isMultijugador = false;
 
     public Scoreboard() {
         initComponents();
+        updateLabels();
+    }
+
+    public void setMultijugador(boolean multi) {
+        this.isMultijugador = multi;
+        updateLabels();
+    }
+
+    private void updateLabels() {
+        if (jLabel1 == null) {
+            return; 
+        }
+        jLabel1.setText(name1 + ": " + score1);
+
+        if (isMultijugador) {
+            jLabel2.setText(name2 + ": " + score2);
+            jLabel2.setVisible(true); 
+        } else {
+            jLabel2.setText(""); 
+            jLabel2.setVisible(false); 
+        }
     }
 
     public void setPlayerName(String name) {
-        this.playerName = name.toUpperCase();
-        jLabel1.setText("SCORE FOR " + playerName + ": " + score);
+        this.name1 = name;
+        updateLabels();
+    }
+
+    public void setPlayer2Name(String name) {
+        this.name2 = name;
+        updateLabels();
     }
 
     @Override
-    public void incrementScore(int increment) {
-        score += increment;
-        jLabel1.setText("SCORE FOR " + playerName + ": " + score);
+    public void incrementScore(int player, int amount) {
+        if (player == 1) {
+            score1 += amount;
+        } else {
+            score2 += amount;
+        }
+        updateLabels();
     }
 
     @Override
     public void reset() {
-        score = 0;
-        jLabel1.setText("SCORE FOR " + playerName + ": " + score);
+        score1 = 0;
+        score2 = 0;
+        updateLabels();
     }
 
     /**
@@ -49,32 +83,37 @@ public class Scoreboard extends javax.swing.JPanel implements Incrementer1 {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Gayathri", 0, 18)); // NOI18N
         jLabel1.setText("               jLabel1");
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
+        jLabel2.setFont(new java.awt.Font("Gayathri", 0, 18)); // NOI18N
+        jLabel2.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(76, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 
 }

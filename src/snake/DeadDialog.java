@@ -53,9 +53,11 @@ public class DeadDialog extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Liberation Sans", 0, 48)); // NOI18N
         jLabel2.setText("GAME OVER!!");
 
+        btnRestartActionPerformed.setFont(new java.awt.Font("Liberation Sans", 0, 36)); // NOI18N
         btnRestartActionPerformed.setText("RESTART");
         btnRestartActionPerformed.addActionListener(this::btnRestartActionPerformedActionPerformed);
 
+        jButton1.setFont(new java.awt.Font("Liberation Sans", 0, 36)); // NOI18N
         jButton1.setText("Restart with other configuration");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
@@ -63,35 +65,35 @@ public class DeadDialog extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 140, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(94, 94, 94))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(163, 163, 163)
-                        .addComponent(jLabel1))
+                        .addGap(54, 54, 54)
+                        .addComponent(jButton1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(228, 228, 228)
-                        .addComponent(btnRestartActionPerformed))
+                        .addGap(123, 123, 123)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(166, 166, 166)
-                        .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(207, 207, 207)
+                        .addComponent(btnRestartActionPerformed)))
+                .addContainerGap(39, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(186, 186, 186))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
+                .addGap(64, 64, 64)
                 .addComponent(jLabel1)
-                .addGap(95, 95, 95)
+                .addGap(76, 76, 76)
                 .addComponent(jLabel2)
-                .addGap(53, 53, 53)
+                .addGap(57, 57, 57)
                 .addComponent(btnRestartActionPerformed)
-                .addGap(62, 62, 62)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addGap(37, 37, 37))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
